@@ -54,7 +54,7 @@ class _LoginState extends State<Login> {
               elevation: 2,
               child: ClipRect(
                 child: Image.asset(
-                  'img/logo.png',
+                  'images/cpdl.png',
                   height: 80,
                   filterQuality: FilterQuality.high,
                   fit: BoxFit.contain,
@@ -145,14 +145,15 @@ class _LoginState extends State<Login> {
   }
   logar() async {
     var dio = Dio();
-    Response response = await dio.post("http://10.14.20.5/users/login",
+    Response response = await dio.post("http://10.14.20.6/users/login",
       data: {
-      'siape': 1765727,
-    'password': 123,
-    'tipo': 'm'
-    }
+      'siape': '1765127',
+      'password': '123',
+      'tipo': 'm'
+      }
     );
     if(response.data != null) {
+      print('####');
       print(response.data);
       // var a = json.decode(response.data);
     }
