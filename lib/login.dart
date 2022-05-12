@@ -1,8 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'package:gentr/years.dart';
+import 'years.dart';
+import 'package:dio/dio.dart';
+
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
 
   @override
   State<Login> createState() => _LoginState();
@@ -103,15 +108,16 @@ class _LoginState extends State<Login> {
                       alignment: Alignment.center,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Years(
-                            nomeProf: nome,
-                            anosCad: anos,
-                          ),
-                        ),
-                      );
+                      logar();
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => Years(
+                      //       nomeProf: nome,
+                      //       anosCad: anos,
+                      //     ),
+                      //   ),
+                      // );
                     },
                     child: const Text(
                       "Entrar",
@@ -136,5 +142,19 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+  logar() async {
+    var dio = Dio();
+    Response response = await dio.post("http://10.14.20.5/users/login",
+      data: {
+      'siape': 1765727,
+    'password': 123,
+    'tipo': 'm'
+    }
+    );
+    if(response.data != null) {
+      print(response.data);
+      // var a = json.decode(response.data);
+    }
   }
 }
