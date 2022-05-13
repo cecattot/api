@@ -1,13 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'years.dart';
 import 'package:dio/dio.dart';
-
+import 'dart:convert' as convert;
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
-
 
   @override
   State<Login> createState() => _LoginState();
@@ -16,25 +13,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final siape = TextEditingController();
   final senha = TextEditingController();
-
-  final nome = 'Claudemir Publio Junior';
-  final List<int> anos = [
-    2022,
-    2021,
-    2020,
-    2019,
-    2017,
-    2016,
-    2015,
-    2014,
-    2013,
-    2012,
-    2012,
-    2012,
-    2012,
-    2012,
-    2012,
-  ];
+  var dio = Dio();
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +30,10 @@ class _LoginState extends State<Login> {
           children: [
             Card(
               margin: const EdgeInsets.all(8.0),
-              elevation: 2,
+              elevation: 1,
               child: ClipRect(
                 child: Image.asset(
-                  'images/cpdl.png',
+                  'img/logo.png',
                   height: 80,
                   filterQuality: FilterQuality.high,
                   fit: BoxFit.contain,
@@ -107,17 +86,42 @@ class _LoginState extends State<Login> {
                     style: ElevatedButton.styleFrom(
                       alignment: Alignment.center,
                     ),
-                    onPressed: () {
-                      logar();
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => Years(
-                      //       nomeProf: nome,
-                      //       anosCad: anos,
-                      //     ),
-                      //   ),
-                      // );
+                    onPressed: () async {
+                      var login = await dio
+                          .post('http://10.14.20.6/users/login', data: {
+                        'siape': siape.text,
+                        'password': senha.text,
+                        'tipo': 'mb^J@mPrDM',
+                      });
+
+                      if (login.data != null) {
+                        var jsonLogin = convert.jsonDecode(login.data);
+
+                        var anos = await dio.post(
+                          'http://10.14.20.6/mobile/anos',
+                          data: {'serial': jsonLogin['serial']},
+                        );
+
+                        var jsonAnos = convert.jsonDecode(anos.data);
+
+                        List<int> anosCad = [];
+                        for (var item in jsonAnos) {
+                          int ano = int.parse(item);
+                          anosCad.add(ano);
+                        }
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Years(
+                              nomeProf: jsonLogin['nome'],
+                              anosCad: anosCad,
+                            ),
+                          ),
+                        );
+                      } else {
+                        mensagem();
+                      }
                     },
                     child: const Text(
                       "Entrar",
@@ -143,19 +147,37 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-  logar() async {
-    var dio = Dio();
-    Response response = await dio.post("http://10.14.20.6/users/login",
-      data: {
-      'siape': '1765127',
-      'password': '123',
-      'tipo': 'm'
-      }
+
+  void mensagem() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: const Text(
+            'Siape ou senha inválidos',
+            style: TextStyle(
+              fontSize: 25.0,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Fechar',
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
-    if(response.data != null) {
-      print('####');
-      print(response.data);
-      // var a = json.decode(response.data);
-    }
   }
 }

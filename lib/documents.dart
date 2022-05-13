@@ -28,7 +28,7 @@ class _DocumentsState extends State<Documents> {
       body: ListView(
         children: [
           Card(
-            elevation: 2,
+            elevation: 1,
             color: Colors.green[50],
             child: ExpansionTile(
               title: const Text('Anual', style: TextStyle(fontSize: 25)),
@@ -36,12 +36,12 @@ class _DocumentsState extends State<Documents> {
                 SizedBox(
                   height: 0.9 * MediaQuery.of(context).size.height,
                   child: listar(widget.anual),
-                )
+                ),
               ],
             ),
           ),
           Card(
-            elevation: 2,
+            elevation: 1,
             color: Colors.green[50],
             child: ExpansionTile(
               title: const Text('1º Semestre', style: TextStyle(fontSize: 25)),
@@ -54,7 +54,7 @@ class _DocumentsState extends State<Documents> {
             ),
           ),
           Card(
-            elevation: 2,
+            elevation: 1,
             color: Colors.green[50],
             child: ExpansionTile(
               title: const Text('2º Semestre', style: TextStyle(fontSize: 25)),
