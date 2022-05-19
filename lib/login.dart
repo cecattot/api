@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'years.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert' as convert;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -16,7 +17,25 @@ class _LoginState extends State<Login> {
   var dio = Dio();
 
   @override
+  void initState() {
+    inicializar();
+    super.initState();
+  }
+
+  void inicializar() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    this.siape.text = (pref.getString("siape") ?? '');
+    this.senha.text = (pref.getString("senha") ?? '');
+    setState(() {
+      siape.text;
+      senha.text;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // siape.text = '1765127';
+    // senha.text = '123';
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -95,32 +114,43 @@ class _LoginState extends State<Login> {
                       });
 
                       if (login.data != null) {
+                        SharedPreferences pref = await SharedPreferences.getInstance();
+                        await pref.setString("siape", siape.text);
+                        await pref.setString("senha", senha.text);
                         var jsonLogin = convert.jsonDecode(login.data);
 
-                        var anos = await dio.post(
-                          'http://10.14.20.6/mobile/anos',
-                          data: {'serial': jsonLogin['serial']},
-                        );
+                        if (jsonLogin['nome'] != 'Erro') {
+                          var anos = await dio.post(
+                            'http://10.14.20.6/mobile/anos',
+                            data: {'serial': jsonLogin['serial']},
+                          );
 
-                        var jsonAnos = convert.jsonDecode(anos.data);
+                          var jsonAnos = convert.jsonDecode(anos.data);
+                          if(jsonAnos[0]!='Erro'){
+                            List<int> anosCad = [];
+                            for (var item in jsonAnos) {
+                              int ano = int.parse(item);
+                              anosCad.add(ano);
+                            }
 
-                        List<int> anosCad = [];
-                        for (var item in jsonAnos) {
-                          int ano = int.parse(item);
-                          anosCad.add(ano);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Years(
+                                  nomeProf: jsonLogin['nome'],
+                                  anosCad: anosCad,
+                                ),
+                              ),
+                            );
+                          } else {
+                            mensagem(jsonAnos[1]);
+                          }
+                        } else {
+                          mensagem(jsonLogin['serial']);
                         }
-
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Years(
-                              nomeProf: jsonLogin['nome'],
-                              anosCad: anosCad,
-                            ),
-                          ),
-                        );
                       } else {
-                        mensagem();
+                        //erro no login.data
+                        mensagem('Erro na requisição');
                       }
                     },
                     child: const Text(
@@ -148,14 +178,14 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void mensagem() {
+  void mensagem(String msg) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const Text(
-            'Siape ou senha inválidos',
+          content: Text(
+            '$msg',
             style: TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.w500,
