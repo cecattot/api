@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'recover.dart';
 import 'years.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert' as convert;
@@ -107,7 +108,7 @@ class _LoginState extends State<Login> {
                     ),
                     onPressed: () async {
                       var login = await dio
-                          .post('http://10.14.20.6/users/login', data: {
+                          .post('https://jsdteste.tk/users/login', data: {
                         'siape': siape.text,
                         'password': senha.text,
                         'tipo': 'mb^J@mPrDM',
@@ -121,7 +122,7 @@ class _LoginState extends State<Login> {
 
                         if (jsonLogin['nome'] != 'Erro') {
                           var anos = await dio.post(
-                            'http://10.14.20.6/mobile/anos',
+                            'https://jsdteste.tk/mobile/anos',
                             data: {'serial': jsonLogin['serial']},
                           );
 
@@ -164,10 +165,18 @@ class _LoginState extends State<Login> {
                 Container(
                   margin: const EdgeInsets.all(5.0),
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const Recover(),
+                          ),
+                        );
+                      },
                       child: const Text(
                         'Recuperar senha',
                         style: TextStyle(fontSize: 20),
+
                       )),
                 ),
               ],
