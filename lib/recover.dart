@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'check.dart';
+import 'package:dio/dio.dart';
+import 'dart:convert' as convert;
 
 class Recover extends StatefulWidget {
   const Recover({Key? key}) : super(key: key);
@@ -67,17 +69,35 @@ class _LoginState extends State<Recover> {
                       alignment: Alignment.center,
                     ),
                     onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Check(
-                            emailDigitado: email.text,
-                          ),
-                        ),
+                      final dio = Dio();
+                      var resposta = await dio.post(
+                        'http://jsdteste.tk/mobile/recover',
+                        data: {
+                          'email': email.text,
+                        },
                       );
+
+                      if (resposta.data != null) {
+                        var jsonResposta = convert.jsonDecode(resposta.data);
+
+                        if (jsonResposta[0] != 'Erro') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Check(
+                                emailDigitado: email.text,
+                              ),
+                            ),
+                          );
+                        } else {
+                          mensagem(jsonResposta[1]);
+                        }
+                      } else {
+                        mensagem('Erro na requisição');
+                      }
                     },
                     child: const Text(
-                      "Entrar",
+                      "Enviar",
                       style: TextStyle(
                         fontSize: 22,
                       ),
@@ -92,15 +112,15 @@ class _LoginState extends State<Recover> {
     );
   }
 
-  void mensagem() {
+  void mensagem(String msg) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const Text(
-            'Siape ou senha inválidos',
-            style: TextStyle(
+          content: Text(
+            msg,
+            style: const TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.w500,
               color: Colors.black,
