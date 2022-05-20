@@ -194,8 +194,8 @@ class _LoginState extends State<Login> {
       builder: (BuildContext context) {
         return AlertDialog(
           content: Text(
-            '$msg',
-            style: TextStyle(
+            msg,
+            style: const TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.w500,
               color: Colors.black,
