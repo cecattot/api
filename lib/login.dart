@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'recover.dart';
-import 'years.dart';
+import 'package:gentr/years.dart';
 import 'package:dio/dio.dart';
-import 'dart:convert' as convert;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert' as convert;
+
+import 'recover.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -15,7 +16,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final siape = TextEditingController();
   final senha = TextEditingController();
-  var dio = Dio();
 
   @override
   void initState() {
@@ -25,8 +25,8 @@ class _LoginState extends State<Login> {
 
   void inicializar() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
-    this.siape.text = (pref.getString("siape") ?? '');
-    this.senha.text = (pref.getString("senha") ?? '');
+    siape.text = (pref.getString("siape") ?? '');
+    senha.text = (pref.getString("senha") ?? '');
     setState(() {
       siape.text;
       senha.text;
@@ -35,8 +35,6 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    // siape.text = '1765127';
-    // senha.text = '123';
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -107,27 +105,31 @@ class _LoginState extends State<Login> {
                       alignment: Alignment.center,
                     ),
                     onPressed: () async {
+                      var dio = Dio();
                       var login = await dio
-                          .post('https://jsdteste.tk/users/login', data: {
+                          .post('http://jsdteste.tk/users/login', data: {
                         'siape': siape.text,
                         'password': senha.text,
                         'tipo': 'mb^J@mPrDM',
                       });
 
                       if (login.data != null) {
-                        SharedPreferences pref = await SharedPreferences.getInstance();
+                        SharedPreferences pref =
+                            await SharedPreferences.getInstance();
                         await pref.setString("siape", siape.text);
                         await pref.setString("senha", senha.text);
+
                         var jsonLogin = convert.jsonDecode(login.data);
 
                         if (jsonLogin['nome'] != 'Erro') {
                           var anos = await dio.post(
-                            'https://jsdteste.tk/mobile/anos',
+                            'http://jsdteste.tk/mobile/anos',
                             data: {'serial': jsonLogin['serial']},
                           );
 
                           var jsonAnos = convert.jsonDecode(anos.data);
-                          if(jsonAnos[0]!='Erro'){
+
+                          if (jsonAnos[0] != 'Erro') {
                             List<int> anosCad = [];
                             for (var item in jsonAnos) {
                               int ano = int.parse(item);
@@ -176,7 +178,6 @@ class _LoginState extends State<Login> {
                       child: const Text(
                         'Recuperar senha',
                         style: TextStyle(fontSize: 20),
-
                       )),
                 ),
               ],

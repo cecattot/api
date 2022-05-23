@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'newPassword.dart';
-// import 'dart:convert' as convert;
+import 'package:gentr/newPassword.dart';
+import 'dart:convert' as convert;
 
 class Check extends StatefulWidget {
   final String emailDigitado;
@@ -71,17 +71,39 @@ class _CheckState extends State<Check> {
                       alignment: Alignment.center,
                     ),
                     onPressed: () async {
-                      if (code.text == '123') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NewPassword(
-                              emailDigitado: widget.emailDigitado,
-                            ),
+                      var dio = Dio();
+                      var resposta = await dio.post(
+                        'http://jsdteste.tk/mobile/check',
+                        data: {
+                          'check': code.text,
+                          'email': widget.emailDigitado,
+                        },
+                      );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NewPassword(
+                            emailDigitado: widget.emailDigitado,
                           ),
-                        );
+                        ),
+                      );
+                      if (resposta.data != null) {
+                        var jsonResposta = convert.jsonDecode(resposta.data);
+
+                        if (jsonResposta[0] != 'Erro') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => NewPassword(
+                                emailDigitado: widget.emailDigitado,
+                              ),
+                            ),
+                          );
+                        } else {
+                          mensagem(jsonResposta[1]);
+                        }
                       } else {
-                        mensagem();
+                        mensagem('Erro na requisição');
                       }
                     },
                     child: const Text(
@@ -100,15 +122,15 @@ class _CheckState extends State<Check> {
     );
   }
 
-  void mensagem() {
+  void mensagem(String msg) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const Text(
-            'Código inválido.',
-            style: TextStyle(
+          content: Text(
+            msg,
+            style: const TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.w500,
               color: Colors.black,

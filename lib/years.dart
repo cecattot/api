@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'documents.dart';
+import 'package:gentr/documents.dart';
 
 class Years extends StatefulWidget {
   final String nomeProf;

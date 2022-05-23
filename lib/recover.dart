@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'check.dart';
+import 'package:gentr/check.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert' as convert;
 
