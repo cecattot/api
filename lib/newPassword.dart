@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
+import 'dart:convert' as convert;
+import 'login.dart';
 
 class NewPassword extends StatefulWidget {
   final String emailDigitado;
@@ -89,8 +91,34 @@ class _NewPasswordState extends State<NewPassword> {
                     ),
                     onPressed: () async {
                       if (password.text == confirm.text) {
+                        var dio = Dio();
+                        var resposta = await dio.post(
+                          'http://jsdteste.tk/mobile/newpassword',
+                          data: {
+                            'email': widget.emailDigitado,
+                            'password': password.text,
+                            'confirmPassword': confirm.text,
+                          },
+                        );
+                        if (resposta.data != null) {
+                          var jsonResposta = convert.jsonDecode(resposta.data);
+
+                          if (jsonResposta[0] != 'Erro') {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const Login(),
+                              ),
+                            );
+                          } else {
+                            mensagem(jsonResposta[1]);
+                          }
+                        } else {
+                          mensagem('Erro na requisição');
+                        }
                       } else {
-                        mensagem();
+                        String msg = 'As senhas não conferem';
+                        mensagem(msg);
                       }
                     },
                     child: const Text(
@@ -109,15 +137,15 @@ class _NewPasswordState extends State<NewPassword> {
     );
   }
 
-  void mensagem() {
+  void mensagem(String msg) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: const Text(
-            'As senhas não conferem.',
-            style: TextStyle(
+          content: Text(
+            msg,
+            style: const TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.w500,
               color: Colors.black,

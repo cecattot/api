@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'package:gentr/newPassword.dart';
+import 'newPassword.dart';
 import 'dart:convert' as convert;
 
 class Check extends StatefulWidget {
@@ -13,7 +13,6 @@ class Check extends StatefulWidget {
 
 class _CheckState extends State<Check> {
   final code = TextEditingController();
-  var dio = Dio();
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +70,14 @@ class _CheckState extends State<Check> {
                       alignment: Alignment.center,
                     ),
                     onPressed: () async {
+                      // var resposta = await dio.post(
+                      //   'http://jsdteste.tk/mobile/check',
+                      //   data: {
+                      //     'check': code.text,
+                      //     'email': widget.emailDigitado,
+                      //   },
+                      // );
+
                       var dio = Dio();
                       var resposta = await dio.post(
                         'http://jsdteste.tk/mobile/check',
@@ -79,6 +86,7 @@ class _CheckState extends State<Check> {
                           'email': widget.emailDigitado,
                         },
                       );
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(

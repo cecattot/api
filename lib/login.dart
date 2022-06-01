@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gentr/years.dart';
+import 'years.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
@@ -106,6 +106,13 @@ class _LoginState extends State<Login> {
                     ),
                     onPressed: () async {
                       var dio = Dio();
+                      // var login = await dio
+                      //     .post('http://jsdteste.tk/users/login', data: {
+                      //   'siape': siape.text,
+                      //   'password': senha.text,
+                      //   'tipo': 'mb^J@mPrDM',
+                      // });
+
                       var login = await dio
                           .post('http://jsdteste.tk/users/login', data: {
                         'siape': siape.text,
@@ -142,6 +149,7 @@ class _LoginState extends State<Login> {
                                 builder: (context) => Years(
                                   nomeProf: jsonLogin['nome'],
                                   anosCad: anosCad,
+                                  serialCadastrado: jsonLogin['serial'],
                                 ),
                               ),
                             );
@@ -177,7 +185,10 @@ class _LoginState extends State<Login> {
                       },
                       child: const Text(
                         'Recuperar senha',
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.red,
+                        ),
                       )),
                 ),
               ],

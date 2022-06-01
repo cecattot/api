@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gentr/check.dart';
+import 'check.dart';
 import 'package:dio/dio.dart';
 import 'dart:convert' as convert;
 
@@ -70,6 +70,13 @@ class _LoginState extends State<Recover> {
                     ),
                     onPressed: () async {
                       final dio = Dio();
+                      // var resposta = await dio.post(
+                      //   'http://jsdteste.tk/mobile/recover',
+                      //   data: {
+                      //     'email': email.text,
+                      //   },
+                      // );
+
                       var resposta = await dio.post(
                         'http://jsdteste.tk/mobile/recover',
                         data: {

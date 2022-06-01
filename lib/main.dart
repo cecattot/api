@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gentr/login.dart';
+import 'login.dart';
 
 void main() async {
   runApp(MaterialApp(
