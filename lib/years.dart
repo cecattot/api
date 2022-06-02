@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'documents.dart';
+import 'package:api/documents.dart';
 import 'dart:convert' as convert;
+
+import 'login.dart';
 
 class Years extends StatefulWidget {
   final String nomeProf;
@@ -34,6 +36,7 @@ class _YearsState extends State<Years> {
           'Prof. ' + widget.nomeProf,
           style: const TextStyle(fontSize: 25),
         ),
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
@@ -105,14 +108,33 @@ class _YearsState extends State<Years> {
             ),
             onTap: () async {
               var dio = Dio();
-              var resposta =
-                  await dio.post('http://jsdteste.tk/mobile/lista', data: {
-                'ano': ano,
-                'busca': indice + 1,
-                'serial': widget.serialCadastrado,
-              });
 
-              if (resposta.data != null) {
+              var resposta = await dio.post(
+                // 'http://10.0.2.2:8765/mobile/lista',
+                'http://jsdteste.tk/mobile/lista',
+                data: {
+                  'ano': ano,
+                  'busca': indice + 1,
+                  'serial': widget.serialCadastrado,
+                },
+              );
+
+              List<dynamic> docsCad = [{'descricao': 'Não há documentos cadastrados',
+                'caminho': 'null'}];
+
+
+              if (resposta.data == '[]') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Documents(
+                      tipoDocumento: tipoDoc[indice],
+                      listaDocumentos: docsCad,
+                      anoPesquisado: ano,
+                    ),
+                  ),
+                );
+              } else {
                 var jsonResposta = convert.jsonDecode(resposta.data);
 
                 if (jsonResposta[0] != 'Erro') {
@@ -127,11 +149,8 @@ class _YearsState extends State<Years> {
                     ),
                   );
                 } else {
-                  mensagem(jsonResposta[1]);
+                  mensagem(jsonResposta[1], jsonResposta[2].toString());
                 }
-              } else {
-                //erro no login.data
-                mensagem('Erro na requisição');
               }
             },
           ),
@@ -140,7 +159,7 @@ class _YearsState extends State<Years> {
     );
   }
 
-  void mensagem(String msg) {
+  void mensagem(String msg, String vlr) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -164,7 +183,16 @@ class _YearsState extends State<Years> {
                 ),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                if(vlr=='1'){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Login(),
+                    ),
+                  );
+                } else {
+                  Navigator.of(context).pop();
+                }
               },
             ),
           ],

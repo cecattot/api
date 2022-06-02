@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'check.dart';
+import 'package:api/check.dart';
 import 'package:dio/dio.dart';
+import 'package:api/main.dart';
 import 'dart:convert' as convert;
 
 class Recover extends StatefulWidget {
@@ -70,14 +71,9 @@ class _LoginState extends State<Recover> {
                     ),
                     onPressed: () async {
                       final dio = Dio();
-                      // var resposta = await dio.post(
-                      //   'http://jsdteste.tk/mobile/recover',
-                      //   data: {
-                      //     'email': email.text,
-                      //   },
-                      // );
 
                       var resposta = await dio.post(
+                        // 'http://10.0.2.2:8765/mobile/recover',
                         'http://jsdteste.tk/mobile/recover',
                         data: {
                           'email': email.text,
@@ -88,7 +84,7 @@ class _LoginState extends State<Recover> {
                         var jsonResposta = convert.jsonDecode(resposta.data);
 
                         if (jsonResposta[0] != 'Erro') {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => Check(
@@ -119,36 +115,38 @@ class _LoginState extends State<Recover> {
     );
   }
 
-  void mensagem(String msg) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Text(
-            msg,
-            style: const TextStyle(
+  void pop(var json) {
+    if(json[2]=='1'){
+      mensagem('expirouuu');
+    } else {
+      mensagem(json[1]);
+    }
+  }
+
+  AlertDialog mensagem(String msg) {
+    return AlertDialog(
+      content: Text(
+        msg,
+        style: const TextStyle(
+          fontSize: 25.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.black,
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: const Text(
+            'Fechar',
+            style: TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.w500,
-              color: Colors.black,
             ),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'Fechar',
-                style: TextStyle(
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

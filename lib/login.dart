@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'years.dart';
+import 'package:api/years.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
+import 'package:api/main.dart';
+
 
 import 'recover.dart';
 
@@ -70,6 +72,7 @@ class _LoginState extends State<Login> {
               margin: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: siape,
+                keyboardType: TextInputType.number,
                 style: const TextStyle(fontSize: 22),
                 decoration: const InputDecoration(
                   labelText: 'Siape',
@@ -106,19 +109,16 @@ class _LoginState extends State<Login> {
                     ),
                     onPressed: () async {
                       var dio = Dio();
-                      // var login = await dio
-                      //     .post('http://jsdteste.tk/users/login', data: {
-                      //   'siape': siape.text,
-                      //   'password': senha.text,
-                      //   'tipo': 'mb^J@mPrDM',
-                      // });
 
-                      var login = await dio
-                          .post('http://jsdteste.tk/users/login', data: {
-                        'siape': siape.text,
-                        'password': senha.text,
-                        'tipo': 'mb^J@mPrDM',
-                      });
+                      var login = await dio.post(
+                        // 'http://10.0.2.2:8765/users/login',
+                        'http://jsdteste.tk/users/login',
+                        data: {
+                          'siape': siape.text,
+                          'password': senha.text,
+                          'tipo': 'mb^J@mPrDM',
+                        },
+                      );
 
                       if (login.data != null) {
                         SharedPreferences pref =
@@ -130,19 +130,16 @@ class _LoginState extends State<Login> {
 
                         if (jsonLogin['nome'] != 'Erro') {
                           var anos = await dio.post(
+                            // 'http://10.0.2.2:8765/mobile/anos',
                             'http://jsdteste.tk/mobile/anos',
-                            data: {'serial': jsonLogin['serial']},
+                            data: {
+                              'serial': jsonLogin['serial'],
+                            },
                           );
 
-                          var jsonAnos = convert.jsonDecode(anos.data);
+                          List<int> anosCad = [];
 
-                          if (jsonAnos[0] != 'Erro') {
-                            List<int> anosCad = [];
-                            for (var item in jsonAnos) {
-                              int ano = int.parse(item);
-                              anosCad.add(ano);
-                            }
-
+                          if (anos.data == '[]') {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -154,7 +151,27 @@ class _LoginState extends State<Login> {
                               ),
                             );
                           } else {
-                            mensagem(jsonAnos[1]);
+                            var jsonAnos = convert.jsonDecode(anos.data);
+
+                            if (jsonAnos[0] != 'Erro') {
+                              for (var item in jsonAnos) {
+                                int ano = int.parse(item);
+                                anosCad.add(ano);
+                              }
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Years(
+                                    nomeProf: jsonLogin['nome'],
+                                    anosCad: anosCad,
+                                    serialCadastrado: jsonLogin['serial'],
+                                  ),
+                                ),
+                              );
+                            } else {
+                              mensagem(jsonAnos);
+                            }
                           }
                         } else {
                           mensagem(jsonLogin['serial']);
@@ -199,36 +216,30 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void mensagem(String msg) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: Text(
-            msg,
-            style: const TextStyle(
+  AlertDialog mensagem(String msg) {
+    return AlertDialog(
+      content: Text(
+        msg,
+        style: const TextStyle(
+          fontSize: 25.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.black,
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          child: const Text(
+            'Fechar',
+            style: TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.w500,
-              color: Colors.black,
             ),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'Fechar',
-                style: TextStyle(
-                  fontSize: 25.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

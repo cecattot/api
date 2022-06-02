@@ -1,3 +1,4 @@
+// import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,6 +26,8 @@ class _DocumentsState extends State<Documents> {
           widget.tipoDocumento + " - " + widget.anoPesquisado,
           style: const TextStyle(fontSize: 25),
         ),
+        automaticallyImplyLeading: false,
+
       ),
       body: listar(widget.listaDocumentos),
       floatingActionButton: FloatingActionButton(
@@ -59,10 +62,48 @@ class _DocumentsState extends State<Documents> {
               ),
               onTap: () async {
                 var _url = Uri.parse(lista[index]['caminho']);
-                await launchUrl(_url);
+                try {
+                  await launchUrl(_url);
+                } catch (e) {
+                  // mensagem("Não foi possível abrir o caminho $_url");
+                  mensagem('Erro: $e');
+                }
               },
             ),
           ),
+        );
+      },
+    );
+  }
+
+  Future<void> mensagem($msg) {
+    return showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(
+            $msg,
+            style: const TextStyle(
+              fontSize: 25.0,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Fechar',
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         );
       },
     );

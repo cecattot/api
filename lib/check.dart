@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import 'newPassword.dart';
+import 'package:api/newPassword.dart';
 import 'dart:convert' as convert;
 
 class Check extends StatefulWidget {
@@ -51,6 +51,7 @@ class _CheckState extends State<Check> {
               margin: const EdgeInsets.all(8.0),
               child: TextField(
                 controller: code,
+                keyboardType: TextInputType.number,
                 style: const TextStyle(fontSize: 22),
                 decoration: const InputDecoration(
                   labelText: 'Código',
@@ -70,16 +71,10 @@ class _CheckState extends State<Check> {
                       alignment: Alignment.center,
                     ),
                     onPressed: () async {
-                      // var resposta = await dio.post(
-                      //   'http://jsdteste.tk/mobile/check',
-                      //   data: {
-                      //     'check': code.text,
-                      //     'email': widget.emailDigitado,
-                      //   },
-                      // );
-
                       var dio = Dio();
+
                       var resposta = await dio.post(
+                        // 'http://10.0.2.2:8765/mobile/check',
                         'http://jsdteste.tk/mobile/check',
                         data: {
                           'check': code.text,
@@ -87,19 +82,11 @@ class _CheckState extends State<Check> {
                         },
                       );
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NewPassword(
-                            emailDigitado: widget.emailDigitado,
-                          ),
-                        ),
-                      );
                       if (resposta.data != null) {
                         var jsonResposta = convert.jsonDecode(resposta.data);
 
                         if (jsonResposta[0] != 'Erro') {
-                          Navigator.push(
+                          Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                               builder: (context) => NewPassword(

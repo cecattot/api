@@ -92,7 +92,9 @@ class _NewPasswordState extends State<NewPassword> {
                     onPressed: () async {
                       if (password.text == confirm.text) {
                         var dio = Dio();
+
                         var resposta = await dio.post(
+                          // 'http://10.0.2.2:8765/mobile/newpassword',
                           'http://jsdteste.tk/mobile/newpassword',
                           data: {
                             'email': widget.emailDigitado,
@@ -100,11 +102,12 @@ class _NewPasswordState extends State<NewPassword> {
                             'confirmPassword': confirm.text,
                           },
                         );
+
                         if (resposta.data != null) {
                           var jsonResposta = convert.jsonDecode(resposta.data);
 
                           if (jsonResposta[0] != 'Erro') {
-                            Navigator.push(
+                            Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const Login(),
