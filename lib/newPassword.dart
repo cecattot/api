@@ -107,12 +107,14 @@ class _NewPasswordState extends State<NewPassword> {
                           var jsonResposta = convert.jsonDecode(resposta.data);
 
                           if (jsonResposta[0] != 'Erro') {
+                            Navigator.of(context).pop();
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const Login(),
                               ),
                             );
+                            mensagem('Senha alterada, use-a para logar');
                           } else {
                             mensagem(jsonResposta[1]);
                           }

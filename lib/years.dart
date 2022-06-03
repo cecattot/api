@@ -9,6 +9,7 @@ class Years extends StatefulWidget {
   final String nomeProf;
   final List<int> anosCad;
   final String serialCadastrado;
+
   const Years({
     Key? key,
     required this.nomeProf,
@@ -30,29 +31,54 @@ class _YearsState extends State<Years> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Prof. ' + widget.nomeProf,
-          style: const TextStyle(fontSize: 25),
-        ),
-        automaticallyImplyLeading: false,
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: listarAnos(),
+    if (widget.anosCad.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Prof. ' + widget.nomeProf,
+            style: const TextStyle(fontSize: 25),
           ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        child: const Icon(Icons.undo_sharp),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
+          automaticallyImplyLeading: false,
+        ),
+        body: const Center(
+          child: Text(
+            'Não há registros.',
+            style: TextStyle(fontSize: 25),
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
+          child: const Icon(Icons.undo_sharp),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Prof. ' + widget.nomeProf,
+            style: const TextStyle(fontSize: 25),
+          ),
+          automaticallyImplyLeading: false,
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: listarAnos(),
+            ),
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
+          child: const Icon(Icons.undo_sharp),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
   }
 
   Widget listarAnos() {
@@ -119,9 +145,7 @@ class _YearsState extends State<Years> {
                 },
               );
 
-              List<dynamic> docsCad = [{'descricao': 'Não há documentos cadastrados',
-                'caminho': 'null'}];
-
+              List<dynamic> docsCad = [];
 
               if (resposta.data == '[]') {
                 Navigator.push(
@@ -183,7 +207,7 @@ class _YearsState extends State<Years> {
                 ),
               ),
               onPressed: () {
-                if(vlr=='1'){
+                if (vlr == '1') {
                   Navigator.push(
                     context,
                     MaterialPageRoute(

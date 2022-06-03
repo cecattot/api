@@ -6,6 +6,7 @@ class Documents extends StatefulWidget {
   final String tipoDocumento;
   final List<dynamic> listaDocumentos;
   final String anoPesquisado;
+
   const Documents({
     Key? key,
     required this.tipoDocumento,
@@ -20,24 +21,46 @@ class Documents extends StatefulWidget {
 class _DocumentsState extends State<Documents> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          widget.tipoDocumento + " - " + widget.anoPesquisado,
-          style: const TextStyle(fontSize: 25),
+    if (widget.listaDocumentos.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            widget.tipoDocumento + " - " + widget.anoPesquisado,
+            style: const TextStyle(fontSize: 25),
+          ),
+          automaticallyImplyLeading: false,
         ),
-        automaticallyImplyLeading: false,
-
-      ),
-      body: listar(widget.listaDocumentos),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        child: const Icon(Icons.undo_sharp),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-    );
+        body: const Center(child: Text('Não há registros.',
+            style: TextStyle(fontSize: 25),
+          )
+          ,),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
+          child: const Icon(Icons.undo_sharp),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            widget.tipoDocumento + " - " + widget.anoPesquisado,
+            style: const TextStyle(fontSize: 25),
+          ),
+          automaticallyImplyLeading: false,
+        ),
+        body: listar(widget.listaDocumentos),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.red,
+          child: const Icon(Icons.undo_sharp),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      );
+    }
   }
 
   Widget listar(List<dynamic> lista) {

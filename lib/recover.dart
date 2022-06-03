@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:api/check.dart';
 import 'package:dio/dio.dart';
@@ -92,6 +94,11 @@ class _LoginState extends State<Recover> {
                               ),
                             ),
                           );
+                          if(jsonResposta[1]==1){
+                            mensagem('Use o código enviado para o email');
+                          } else{
+                            mensagem('Um código foi enviado para o email');
+                          }
                         } else {
                           mensagem(jsonResposta[1]);
                         }
@@ -115,38 +122,36 @@ class _LoginState extends State<Recover> {
     );
   }
 
-  void pop(var json) {
-    if(json[2]=='1'){
-      mensagem('expirouuu');
-    } else {
-      mensagem(json[1]);
-    }
-  }
-
-  AlertDialog mensagem(String msg) {
-    return AlertDialog(
-      content: Text(
-        msg,
-        style: const TextStyle(
-          fontSize: 25.0,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: const Text(
-            'Fechar',
-            style: TextStyle(
+  void mensagem(String msg) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(
+            msg,
+            style: const TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.w500,
+              color: Colors.black,
             ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ],
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Fechar',
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onPressed: () {
+                  Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

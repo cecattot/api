@@ -43,6 +43,7 @@ class _LoginState extends State<Login> {
           'Gentr',
           style: TextStyle(fontSize: 30),
         ),
+
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
