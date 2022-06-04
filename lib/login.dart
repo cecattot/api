@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:api/years.dart';
+import 'package:gentr/years.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert' as convert;
-import 'package:api/main.dart';
-
-
+import 'info.dart';
 import 'recover.dart';
 
 class Login extends StatefulWidget {
@@ -39,11 +37,30 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Gentr',
-          style: TextStyle(fontSize: 30),
+        title: ListTile(
+          title: const Text(
+            'Gentr',
+            style: TextStyle(
+              fontSize: 30,
+              color: Colors.white,
+            ),
+          ),
+          trailing: GestureDetector(
+            child: const Icon(
+              Icons.info_outline,
+              size: 30,
+              color: Colors.white,
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const Info(),
+                ),
+              );
+            },
+          ),
         ),
-
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -51,7 +68,7 @@ class _LoginState extends State<Login> {
           children: [
             Card(
               margin: const EdgeInsets.all(8.0),
-              elevation: 1,
+              elevation: 2,
               child: ClipRect(
                 child: Image.asset(
                   'img/logo.png',
@@ -60,6 +77,7 @@ class _LoginState extends State<Login> {
                   fit: BoxFit.contain,
                 ),
               ),
+              shadowColor: Colors.red,
             ),
             const Text(
               'Login',
@@ -77,6 +95,22 @@ class _LoginState extends State<Login> {
                 style: const TextStyle(fontSize: 22),
                 decoration: const InputDecoration(
                   labelText: 'Siape',
+                  labelStyle: TextStyle(
+                    fontSize: 22,
+                    color: Color.fromARGB(255, 222, 105, 66),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 222, 105, 66),
+                      width: 1,
+                    ),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 222, 105, 66),
+                      width: 1,
+                    ),
+                  ),
                   icon: Icon(
                     Icons.people,
                     size: 25,
@@ -93,6 +127,22 @@ class _LoginState extends State<Login> {
                 style: const TextStyle(fontSize: 22),
                 decoration: const InputDecoration(
                   labelText: 'Senha',
+                  labelStyle: TextStyle(
+                    fontSize: 22,
+                    color: Color.fromARGB(255, 222, 105, 66),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 222, 105, 66),
+                      width: 1,
+                    ),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 222, 105, 66),
+                      width: 1,
+                    ),
+                  ),
                   icon: Icon(
                     Icons.password,
                     size: 25,
@@ -205,7 +255,7 @@ class _LoginState extends State<Login> {
                         'Recuperar senha',
                         style: TextStyle(
                           fontSize: 20,
-                          color: Colors.red,
+                          color: Color.fromARGB(255, 222, 105, 66),
                         ),
                       )),
                 ),

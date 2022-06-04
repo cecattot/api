@@ -1,4 +1,4 @@
-package com.example.api
+package com.example.gentr
 
 import io.flutter.embedding.android.FlutterActivity
 

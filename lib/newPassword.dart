@@ -24,6 +24,7 @@ class _NewPasswordState extends State<NewPassword> {
           'Gentr',
           style: TextStyle(fontSize: 30),
         ),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -31,7 +32,7 @@ class _NewPasswordState extends State<NewPassword> {
           children: [
             Card(
               margin: const EdgeInsets.all(8.0),
-              elevation: 1,
+              elevation: 2,
               child: ClipRect(
                 child: Image.asset(
                   'img/logo.png',
@@ -40,6 +41,7 @@ class _NewPasswordState extends State<NewPassword> {
                   fit: BoxFit.contain,
                 ),
               ),
+              shadowColor: Colors.red,
             ),
             const Text(
               'Nova Senha',
@@ -58,6 +60,22 @@ class _NewPasswordState extends State<NewPassword> {
                 style: const TextStyle(fontSize: 22),
                 decoration: const InputDecoration(
                   labelText: 'Senha',
+                  labelStyle: TextStyle(
+                    fontSize: 22,
+                    color: Color.fromARGB(255, 222, 105, 66),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 222, 105, 66),
+                      width: 1,
+                    ),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 222, 105, 66),
+                      width: 1,
+                    ),
+                  ),
                   icon: Icon(
                     Icons.password,
                     size: 25,
@@ -74,6 +92,22 @@ class _NewPasswordState extends State<NewPassword> {
                 style: const TextStyle(fontSize: 22),
                 decoration: const InputDecoration(
                   labelText: 'Confirmação',
+                  labelStyle: TextStyle(
+                    fontSize: 22,
+                    color: Color.fromARGB(255, 222, 105, 66),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 222, 105, 66),
+                      width: 1,
+                    ),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 222, 105, 66),
+                      width: 1,
+                    ),
+                  ),
                   icon: Icon(
                     Icons.password,
                     size: 25,
@@ -138,6 +172,13 @@ class _NewPasswordState extends State<NewPassword> {
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 222, 105, 66),
+        child: const Icon(Icons.undo_sharp),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }

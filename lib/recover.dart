@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:api/check.dart';
+import 'package:gentr/check.dart';
 import 'package:dio/dio.dart';
-import 'package:api/main.dart';
 import 'dart:convert' as convert;
 
 class Recover extends StatefulWidget {
@@ -24,6 +21,7 @@ class _LoginState extends State<Recover> {
           'Gentr',
           style: TextStyle(fontSize: 30),
         ),
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         padding: const EdgeInsets.all(16.0),
@@ -31,7 +29,7 @@ class _LoginState extends State<Recover> {
           children: [
             Card(
               margin: const EdgeInsets.all(8.0),
-              elevation: 1,
+              elevation: 2,
               child: ClipRect(
                 child: Image.asset(
                   'img/logo.png',
@@ -40,6 +38,7 @@ class _LoginState extends State<Recover> {
                   fit: BoxFit.contain,
                 ),
               ),
+              shadowColor: Colors.red,
             ),
             const Text(
               'Recuperação de Senha',
@@ -56,6 +55,22 @@ class _LoginState extends State<Recover> {
                 style: const TextStyle(fontSize: 22),
                 decoration: const InputDecoration(
                   labelText: 'E-mail',
+                  labelStyle: TextStyle(
+                    fontSize: 22,
+                    color: Color.fromARGB(255, 222, 105, 66),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 222, 105, 66),
+                      width: 1,
+                    ),
+                  ),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 222, 105, 66),
+                      width: 1,
+                    ),
+                  ),
                   icon: Icon(
                     Icons.people,
                     size: 25,
@@ -94,9 +109,9 @@ class _LoginState extends State<Recover> {
                               ),
                             ),
                           );
-                          if(jsonResposta[1]==1){
+                          if (jsonResposta[1] == 1) {
                             mensagem('Use o código enviado para o email');
-                          } else{
+                          } else {
                             mensagem('Um código foi enviado para o email');
                           }
                         } else {
@@ -118,6 +133,13 @@ class _LoginState extends State<Recover> {
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 222, 105, 66),
+        child: const Icon(Icons.undo_sharp),
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }
@@ -146,7 +168,7 @@ class _LoginState extends State<Recover> {
                 ),
               ),
               onPressed: () {
-                  Navigator.of(context).pop();
+                Navigator.of(context).pop();
               },
             ),
           ],

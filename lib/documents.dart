@@ -1,4 +1,3 @@
-// import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -30,12 +29,14 @@ class _DocumentsState extends State<Documents> {
           ),
           automaticallyImplyLeading: false,
         ),
-        body: const Center(child: Text('Não há registros.',
+        body: const Center(
+          child: Text(
+            'Não há registros.',
             style: TextStyle(fontSize: 25),
-          )
-          ,),
+          ),
+        ),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.red,
+          backgroundColor: const Color.fromARGB(255, 222, 105, 66),
           child: const Icon(Icons.undo_sharp),
           onPressed: () {
             Navigator.pop(context);
@@ -53,7 +54,7 @@ class _DocumentsState extends State<Documents> {
         ),
         body: listar(widget.listaDocumentos),
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.red,
+          backgroundColor: const Color.fromARGB(255, 222, 105, 66),
           child: const Icon(Icons.undo_sharp),
           onPressed: () {
             Navigator.pop(context);
@@ -80,8 +81,8 @@ class _DocumentsState extends State<Documents> {
             trailing: GestureDetector(
               child: const Icon(
                 Icons.link,
-                size: 22,
-                color: Colors.red,
+                size: 25,
+                color: Color.fromARGB(255, 222, 105, 66),
               ),
               onTap: () async {
                 var _url = Uri.parse(lista[index]['caminho']);
