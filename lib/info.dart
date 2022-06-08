@@ -63,7 +63,7 @@ class Info extends StatelessWidget {
           integrante('Miqueias Paçoca'),
           integrante('Priscila Turista'),
           integrante('Wagner Avast'),
-          integrante('Wanderson'),
+          integrante('Wanderson Barba'),
           const Center(
             child: Text(
               'Junho de 2022'
