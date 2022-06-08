@@ -267,30 +267,36 @@ class _LoginState extends State<Login> {
     );
   }
 
-  AlertDialog mensagem(String msg) {
-    return AlertDialog(
-      content: Text(
-        msg,
-        style: const TextStyle(
-          fontSize: 25.0,
-          fontWeight: FontWeight.w500,
-          color: Colors.black,
-        ),
-      ),
-      actions: <Widget>[
-        TextButton(
-          child: const Text(
-            'Fechar',
-            style: TextStyle(
+  void mensagem(String msg) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(
+            msg,
+            style: const TextStyle(
               fontSize: 25.0,
               fontWeight: FontWeight.w500,
+              color: Colors.black,
             ),
           ),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ],
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Fechar',
+                style: TextStyle(
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
